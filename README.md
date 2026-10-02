@@ -2,9 +2,9 @@
 A Databases course assignment by Group 17 building a speicifc Database to store differnet hurricanes over the years to evaluate their destruction over time. Doing so, we can identify if hurricanes have become more destructive over the years and if climate change plays any role in it
 
 # Guide
-All the necessary code is inside hurricane_database.ipynb
+All the necessary code to query through our mySQL server is inside hurricane_database.ipynb
 All necessary background infromation is inside this README.md
-Comments are added ti understnad the different code cells
+Comments are added to understand the different code cells
 
 # Overall topic of the DB
 The topic we chose was to look at the overall broad societal issue: climate change. However, we felt climate change was a little too broad of a topic and decided to narrow it down. We therefore looked for a recent, clearly climate change linked disaster to narrow down our focus. This led us to Hurricane Melissa in 2025 and the severe destruction it caused across the Caribbean. So, we narrowed our focus down to hurricanes in general and decided to specifically look at the destruction hurricanes over time, and how climate change relates to hurricanes.
@@ -44,3 +44,9 @@ Location([location_ID]:int NOT NULL, region:varchar(120), country:varchar(120), 
 In week 5, our task was to find real data and integrate it with the curretn structure of DB. For our DB, we decided to insert to different hurricanes and their MD date, destruction data and location data. our two hurricanes are:
 Hurricane Melissa: [Visual Studio Code](https://www.nhc.noaa.gov/data/tcr/AL132025_Melissa.pdf)
 Hurricane Ian: [Visual Studio Code](https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf)
+Other specific sources for specific values are inside the dataset.
+
+We created an Excel sheet which contains all data for all of the four entites for differnet hurricnaes. We currently have 2. The main struggles we faced, was that we found detailled infromation of Metereological Data and Location Data for the hurricanes. But finding high quality destruction data, for speific locations, a hurricane passed through was very difficult. We were able to find values for the number of direct and indirect deaths, but specific economic damage for specific locations was difficult to find. So, the missing data are labelled as null, which contextually means that information is not known for that. But with the available data, we made sure, that the data is correctly formatted and inserted coreclty to ensure consistency.
+
+Due to data inconsistency, we had to make some new changes to the constraints of attributes of our schema. This is the new ERD: 
+![Getting Started](./images/ERD-2.png)
