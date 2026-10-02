@@ -39,3 +39,8 @@ Location([location_ID]:int NOT NULL, region:varchar(120), country:varchar(120), 
 
 [Watch our pitch video](./video/pitch.mp4)
 
+# Integrating real data into our Database
+
+In week 5, our task was to find real data and integrate it with the curretn structure of DB. For our DB, we decided to insert to different hurricanes and their MD date, destruction data and location data. our two hurricanes are:
+Hurricane Melissa: [Visual Studio Code](https://www.nhc.noaa.gov/data/tcr/AL132025_Melissa.pdf)
+Hurricane Ian: [Visual Studio Code](https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf)
