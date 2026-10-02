@@ -42,11 +42,27 @@ Location([location_ID]:int NOT NULL, region:varchar(120), country:varchar(120), 
 # Integrating real data into our Database
 
 In week 5, our task was to find real data and integrate it with the curretn structure of DB. For our DB, we decided to insert to different hurricanes and their MD date, destruction data and location data. our two hurricanes are:
-Hurricane Melissa: [Visual Studio Code](https://www.nhc.noaa.gov/data/tcr/AL132025_Melissa.pdf)
-Hurricane Ian: [Visual Studio Code](https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf)
+Hurricane Melissa: [MELISSA](https://www.nhc.noaa.gov/data/tcr/AL132025_Melissa.pdf)
+Hurricane Ian: [IAN](https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf)
+Hurricane Fiona: [FIONA](https://www.nhc.noaa.gov/data/tcr/AL072022_Fiona.pdf)
 Other specific sources for specific values are inside the dataset.
 
 We created an Excel sheet which contains all data for all of the four entites for differnet hurricnaes. We currently have 2. The main struggles we faced, was that we found detailled infromation of Metereological Data and Location Data for the hurricanes. But finding high quality destruction data, for speific locations, a hurricane passed through was very difficult. We were able to find values for the number of direct and indirect deaths, but specific economic damage for specific locations was difficult to find. So, the missing data are labelled as null, which contextually means that information is not known for that. But with the available data, we made sure, that the data is correctly formatted and inserted coreclty to ensure consistency.
 
-Due to data inconsistency, we had to make some new changes to the constraints of attributes of our schema. This is the new ERD: 
+Due to data inconsistency, we had to make some new changes to the constraints of attributes of our schema. This is the new ERD:
 ![Getting Started](./images/ERD-2.png)
+
+Even after changing the structure of the DB, the DB stays in 3NF. 
+new schema definiton:
+
+# Relational Schema of our updated ERD
+
+PK are in [] and FK are given a star (*)
+
+Meteorological_Data([MD_ID]:int NOT NULL, hurricane_ID*:int NOT NULL, location_id*:int NOT NULL, start_datetime:DATETIME, end_datetime:DATETIME, avg_wind_speed:decimal(6,2) NULL, total_rainfall:decimal(7,2) NULL, avg_temperature:decimal(5,2) NULL, source:varchar(1000))
+
+Hurricane([hurricane_ID]:int NOT NULL, name:varchar(120), start_datetime:DATETIME, end_datetime:DATETIME, source:varchar(1000) NOT NULL)
+
+Destruction([destruction_ID]:int NOT NULL, MD_ID*:int NOT NULL, deaths_direct:int NULL, deaths_indirect:int NULL, infrastructure_damage_usd:BIGINT NULL, economic_damage_overall_usd:BIGINT NULL, source:varchar(1000) NOT NULL)
+
+Location([location_id]:int NOT NULL, region:varchar(120) NULL, country:varchar(120) NULL, latitude:decimal(9,6) NULL, longitude:decimal(9,6) NULL, source:varchar(1000) NOT NULL)
