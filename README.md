@@ -1,5 +1,5 @@
 # Databases-Group17-hurricanesDB
-A Databases course assignment by Group 17 building a speicifc Database to store differnet hurricanes over the years to evaluate their destruction over time. Doing so, we can identify if hurricanes have become more destructive over the years and if climate change plays any role in it
+A Databases course assignment by Group 17 
 
 # Guide
 All the necessary code to query through our mySQL server is inside hurricane_database.ipynb
@@ -7,11 +7,18 @@ All necessary background infromation is inside this README.md
 Comments are added to understand the different code cells
 
 # Overall topic of the DB
-The topic we chose was to look at the overall broad societal issue: climate change. However, we felt climate change was a little too broad of a topic and decided to narrow it down. We therefore looked for a recent, clearly climate change linked disaster to narrow down our focus. This led us to Hurricane Melissa in 2025 and the severe destruction it caused across the Caribbean. So, we narrowed our focus down to hurricanes in general and decided to specifically look at the destruction hurricanes over time, and how climate change relates to hurricanes.
+The main question we wanted to answer: Have hurricanes have become more destructive since climate change started? To answer this, we wanted to create a Database that contains all informaion about a hurricane. Specifcally, we wanted to know its full course, meereological data and the destruction it has caused along the way. By gathering all this information, we can later answer, the main question.
 
 # Why this topic?
+The topic we chose was to look at the overall broad societal issue: climate change. However, we felt climate change was a little too broad of a topic and decided to narrow it down. We therefore looked for a recent, clearly climate change linked disaster to narrow down our focus. This led us to Hurricane Melissa in 2025 and the severe destruction it caused across the Caribbean. So, we narrowed our focus down to hurricanes in general and decided to specifically look at the destruction hurricanes over time, and how climate change relates to hurricanes.
 
 # Stakeholder
+
+- **Residents and communities in hurricane-prone regions** (e.g. the Caribbean): directly affected by hurricanes; understanding their impact helps with prevention and minimizing destruction.
+- **Businesses offering hurricane-preparedness products and services**: help people make their homes and properties ready for climate disasters, understand more detailledly how hurricanes happen.
+- **Governments and emergency response agencies**: coordinate disaster response and long-term resilience planning, and need to act quickly when a hurricane hits. They could understand how destructive hurricanes are becoming.
+- **Insurance companies**: bear the financial risk of hurricane destruction. It would help them restructure their contracts, when it maybe comes out that hurricanes might get more destructive than before climate change.
+- **The general public**: the aftermath of a hurricane shows the real and ongoing effects of climate change, which makes the issue relevant to everyone.
 
 # Idea of our ERD
 The idea of the ERD is to build a database in which many different hurricanes from all over the years can be stored and compared based on the destruction they caused in different locations and time periods. We want to use this database to later assess if hurricanes and hurricane destruction have intensified over time. We do know that data may not be available in the amounts we would need to prove this, yet we still chose this idea, because it could help answer this question. Where full time-series data is not available we will have to restrict comparisons to the subset of hurricanes which do have sufficient amounts of data. We want to see if the storm’s intensity is somehow related to climate change and this motivated our decision to examine the broader pattern of hurricane destruction over time.
