@@ -53,10 +53,17 @@ Location([location_ID]:int NOT NULL, region:varchar(120), country:varchar(120), 
 # Integrating real data into our Database
 
 In week 5, our task was to find real data and integrate it with the curretn structure of DB. For our DB, we decided to insert to different hurricanes and their MD date, destruction data and location data.
+
+## Sources of our data
+
 Hurricane Melissa: [MELISSA](https://www.nhc.noaa.gov/data/tcr/AL132025_Melissa.pdf)
 Hurricane Ian: [IAN](https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf)
 Hurricane Fiona: [FIONA](https://www.nhc.noaa.gov/data/tcr/AL072022_Fiona.pdf)
 Other specific sources for specific values are inside the dataset.
+
+## Explanation of data creation and cleaning
+
+DO THIS MORE DETAILLED
 
 We created an Excel sheet which contains all data for all of the four entites for differnet hurricnaes. We currently have 2. The main struggles we faced, was that we found detailled infromation of Metereological Data and Location Data for the hurricanes. But finding high quality destruction data, for speific locations, a hurricane passed through was very difficult. We were able to find values for the number of direct and indirect deaths, but specific economic damage for specific locations was difficult to find. So, the missing data are labelled as null, which contextually means that information is not known for that. But with the available data, we made sure, that the data is correctly formatted and inserted coreclty to ensure consistency.
 
@@ -80,7 +87,13 @@ Destruction([destruction_ID]:int NOT NULL, MD_ID*:int NOT NULL, deaths_direct:in
 
 Location([location_id]:int NOT NULL, region:varchar(120) NULL, country:varchar(120) NULL, latitude:decimal(9,6) NULL, longitude:decimal(9,6) NULL, source:varchar(1000) NOT NULL)
 
+### Explanation of relational Schema of our updated ERD
+
 ## Limitations of our updated DB
 
 # Future Work
 In the future, we want to gather more data on destruction from the specific places. As we have already expirienced when trying to add real destruction data into our DB, we have realized that there is not enough information regarding the destruction a hurricane has caused specfically at a location at a given time. This greatly limits us analyze how destructive hurricanes were, and makes it difficult to sum up all the overall economic damage a hurricane has caused. Another aspect we want to add to our DB is to connect it with an application. We want to create a web based application which would contain a timeline, where all the differnet hurricanes can be depicted, and when you click ona. specific hurricanes, you would get all the differnet information on its course, destruction and metereological data. But the main goal of this is to compare hurricanes, that happend before climate change and hurricnaes that happend since climate change started. Then we can see if hurricanes have become more destructive since climate change, which would answer the main question of this project.
+
+# At last, replicate our DB!
+
+tba
