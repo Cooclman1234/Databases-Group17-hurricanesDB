@@ -63,12 +63,12 @@ We created an Excel sheet which contains all data for all of the four entites fo
 Due to data inconsistency, we had to make some new changes to the constraints of attributes of our schema. This is the new ERD:
 ![Getting Started](./images/ERD-2.png)
 
-## Normalization Form of our new DB structure
+## Normalization Form of our updated DB structure
 
 Even after changing the structure of the DB, the DB stays in 3NF.
 new schema definiton:
 
-# Relational Schema of our updated ERD
+## Relational Schema of our updated ERD
 
 PK are in [] and FK are given a star (*)
 
@@ -80,7 +80,7 @@ Destruction([destruction_ID]:int NOT NULL, MD_ID*:int NOT NULL, deaths_direct:in
 
 Location([location_id]:int NOT NULL, region:varchar(120) NULL, country:varchar(120) NULL, latitude:decimal(9,6) NULL, longitude:decimal(9,6) NULL, source:varchar(1000) NOT NULL)
 
-# Limitations of our DB
+## Limitations of our updated DB
 
 # Future Work
 In the future, we want to gather more data on destruction from the specific places. As we have already expirienced when trying to add real destruction data into our DB, we have realized that there is not enough information regarding the destruction a hurricane has caused specfically at a location at a given time. This greatly limits us analyze how destructive hurricanes were, and makes it difficult to sum up all the overall economic damage a hurricane has caused. Another aspect we want to add to our DB is to connect it with an application. We want to create a web based application which would contain a timeline, where all the differnet hurricanes can be depicted, and when you click ona. specific hurricanes, you would get all the differnet information on its course, destruction and metereological data. But the main goal of this is to compare hurricanes, that happend before climate change and hurricnaes that happend since climate change started. Then we can see if hurricanes have become more destructive since climate change, which would answer the main question of this project.
