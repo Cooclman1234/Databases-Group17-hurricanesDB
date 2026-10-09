@@ -1,5 +1,5 @@
 # Databases-Group17-hurricanesDB
-A Databases course assignment by Group 17 
+A Databases course assignment by Group 17.
 
 # Guide
 All the necessary code to query through our mySQL server is inside hurricane_database.ipynb
@@ -147,4 +147,81 @@ In the future, we want to gather more data on destruction from the specific plac
 
 # At last, replicate our DB!
 
-tba
+## Requirements
+- MySQL Server 8.0 or newer, running locally
+- Conda (or Python 3.10+ with `pandas`, `openpyxl` and `mysql-connector-python`)
+
+## Steps
+
+1. Clone the repository and set up the environment:
+```bash
+   git clone <repo-url>
+   cd Databases-Group17-hurricanesDB
+   conda env create -f environment.yml
+   conda activate <env-name>
+```
+2. Create the database and the four empty tables:
+```bash
+   mysql -u root -p < start/schema.sql
+```
+3. Load the data:
+```bash
+   python start/load_data.py
+```
+   The script asks for your MySQL password, reads `week5/Databases-week5-task.xlsx`, cleans the values and inserts them.
+4. The script prints the number of rows per table. You should see:
+
+   | Table | Rows |
+   |---|---|
+   | Hurricane | 3 |
+   | Location | 99 |
+   | MeteorologicalData | 109 |
+   | Destruction | 29 |
+
+**Note:** the script stops if the tables already contain rows. To reload, empty them first in this order: Destruction, MeteorologicalData, Location, Hurricane.
+
+### if you need to empty out the tables
+
+run this python script in a seperate file
+
+```python
+def removeAllDestructionData():
+    query = """
+    DELETE FROM Destruction
+    """
+    cursor.execute(query)
+    connection.commit()
+
+def removeAllMeteorologicalData():
+    query = """
+    DELETE FROM MeteorologicalData
+    """
+    cursor.execute(query)
+    connection.commit()
+
+def removeAllLocationData():
+    query = """
+    DELETE FROM Location
+    """
+    cursor.execute(query)
+    connection.commit()
+
+def removeAllHurricaneData():
+    query = """
+    DELETE FROM Hurricane
+    """
+    cursor.execute(query)       
+    connection.commit()
+
+
+removeAllDestructionData()
+removeAllMeteorologicalData()
+removeAllLocationData()
+removeAllHurricaneData()
+
+for t in ["Destruction", "MeteorologicalData", "Location", "Hurricane"]:
+    cursor.execute(f"SELECT COUNT(*) FROM {t}")
+    print(t, cursor.fetchone())
+
+
+```
