@@ -56,16 +56,56 @@ In week 5, our task was to find real data and integrate it with the curretn stru
 
 ## Sources of our data
 
-Hurricane Melissa: [MELISSA](https://www.nhc.noaa.gov/data/tcr/AL132025_Melissa.pdf)
-Hurricane Ian: [IAN](https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf)
-Hurricane Fiona: [FIONA](https://www.nhc.noaa.gov/data/tcr/AL072022_Fiona.pdf)
-Other specific sources for specific values are inside the dataset.
+We use two types of sources that complement each other: the NHC Tropical Cyclone reports give the course of each hurricane (Hurricane, Location and Meteorological Data entities), and post disaster damage reports give the destruction (Destruction entity). The exact page and table for every value is cited in the source column of each row in week5/Databases-week5-task.xlsx.
 
-## Explanation of data creation and cleaning
+| Source | Used for | Published | Licence |
+|---|---|---|---|
+| [NHC Tropical Cyclone Report: Hurricane Melissa (AL132025)](https://www.nhc.noaa.gov/data/tcr/AL132025_Melissa.pdf) | Hurricane, Location, Meteorological Data, Destruction (deaths) | revised 19 May 2026 | US government work, public domain |
+| [NHC Tropical Cyclone Report: Hurricane Ian (AL092022)](https://www.nhc.noaa.gov/data/tcr/AL092022_Ian.pdf) | Hurricane, Location, Meteorological Data, Destruction | 2 April 2023, revised 12 March 2026 | US government work, public domain |
+| [NHC Tropical Cyclone Report: Hurricane Fiona (AL072022)](https://www.nhc.noaa.gov/data/tcr/AL072022_Fiona.pdf) | Hurricane, Location, Meteorological Data, Destruction | 23 March 2023 | US government work, public domain |
+| [World Bank / GFDRR: GRADE report, Hurricane Melissa, Jamaica](https://www.gfdrr.org/sites/default/files/publication/GRADE%20Jamaica_FIN.pdf) ([landing page](https://www.gfdrr.org/en/JamaicaGRADE)) | Destruction: damage per Jamaican parish | 19 November 2025 | CC BY 3.0 IGO |
+| [UNOCHA: Jamaica Hurricane Melissa Situation Report No. 4](https://www.unocha.org/publications/report/jamaica/jamaica-hurricane-melissa-situation-report-no-4-11-november) | Destruction: deaths per parish | data as of 11 November 2025 | OCHA website terms of use (no explicit licence stated) |
+| [Jamaica Information Service: 45 confirmed deaths from Hurricane Melissa](https://jis.gov.jm/45-confirmed-deaths-from-hurricane-melissa/) | Destruction: deaths | 2025 | JIS website terms of use (no explicit licence stated) |
+| [Jamaica Information Service: St. Elizabeth, St. James, Westmoreland sustained US$5.5 billion in damage](https://jis.gov.jm/st-elizabeth-st-james-westmoreland-sustained-us5-5-billion-in-damage-from-hurricane-melissa/) | Destruction: damage | 2025 | JIS website terms of use (no explicit licence stated) |
+| [IDB blog: Jamaica after Hurricane Melissa](https://www.iadb.org/en/blog/economic-analysis/jamaica-after-hurricane-melissa-building-resilience-through-disaster-risk-financing) | Destruction: total economic damage of Melissa | 2026 | IDB website terms of use (no explicit licence stated) |
 
-DO THIS MORE DETAILLED
 
-We created an Excel sheet which contains all data for all of the four entites for differnet hurricnaes. We currently have 2. The main struggles we faced, was that we found detailled infromation of Metereological Data and Location Data for the hurricanes. But finding high quality destruction data, for speific locations, a hurricane passed through was very difficult. We were able to find values for the number of direct and indirect deaths, but specific economic damage for specific locations was difficult to find. So, the missing data are labelled as null, which contextually means that information is not known for that. But with the available data, we made sure, that the data is correctly formatted and inserted coreclty to ensure consistency.
+## Dataset creation and data cleaning
+
+### How we built the dataset
+
+There was no dataset that was already made that fit our ERD, so we built one by hand in `week5/Databases-week5-task.xlsx`, which has one sheet per entity (`hurricane_entity`, `location_entity`, `meteorological_data`, `destruction_entity`), with the column names of our schema plus three helper sheets:
+- `best_track_ref` (Melissa) and `best_track_ref_Ian`: the 6-hourly "best track" tables (time, position, pressure, wind) copied from Table 1 of the NHC reports.
+- `jamaica_parish_damage_ref`: damage per Jamaican parish from the GFDRR GRADE report.
+
+In total the dataset contains **3 hurricanes** (Melissa 2025, Ian 2022, Fiona 2022), **99 locations**, **109 meteorological observations** and **29 destruction records**.
+
+How each entity was filled:
+
+- **Hurricane**: start = when the storm formed, end = when it dissipated, both from Table 1 of the NHC report.
+- **Location**: one row per landfall point, weather station or ship position mentioned in the NHC reports. Ship positions are rounded to 0.1° and reused when several reports share a position.
+- **Meteorological Data**: one row per hurricane passing a location. The time window is the period the hurricane affected that location (for example from peak intensity until it left Jamaica's coast).
+  - `avg_wind_speed` is in **knots**. For landfalls it is the average of the best-track winds inside the window (computed with `AVERAGEIFS` on the best-track sheet). For stations and ships it is the single reported wind.
+  - `total_rainfall` is in **mm**. Values reported in inches were converted (1 in = 25.4 mm).
+- **Destruction**: linked to the Meteorological Data row of the place where the damage happened. Jamaican parish damage comes from the GRADE report, deaths from UNOCHA, JIS and the NHC reports.
+
+### Data cleaning
+
+| Issue | What we did |
+|---|---|
+| **Missing values.** The sources often don't report a value for a specific place (e.g. no temperature anywhere, no coordinates for Haiti because Melissa made no landfall there, no monetary damage estimate for Cuba, no split between direct and indirect deaths for Jamaica). | Left the cell empty, which becomes `NULL` in the database. `NULL` means "not reported by the source", never 0. The `source` column of each row explains why a value is missing. To allow this, we made these columns nullable (see the schema changes below). |
+| **Locations without a country.** Ship reports are at sea. | `country` is `NULL` and `region` is "Open water (ship report position)". |
+| **Date formats.** Times in the reports are written like "1200 UTC 28 Oct", and some cells were stored as text such as `2022-09-16 23:15 UTC`. | All times converted to `YYYY-MM-DD HH:MM:SS` in UTC. The loader removes the "UTC" text and converts strings to `DATETIME`. |
+| **Money stored as text.** Some damage values were written as text like `$2.500.000.000`. | The loader removes `$` and the thousands separators and stores the value as `BIGINT` (US$). |
+| **Mixed wind units.** NHC uses 1-minute sustained winds, but Cuban stations report 10-minute winds. | Stored as reported, in knots, and noted in the `source` column. |
+| **Ditto marks.** In the Ian best-track table the stage column uses `"` for "same as above". | Filled down with the actual value. |
+| **Duplicates and key errors.** | Every ID is unique, and every foreign key (`hurricane_id`, `location_id`, `MD_ID`) points to an existing row. We checked this in the notebook and fixed one Destruction row that referred to a non-existing `MD_ID` (123). |
+| **Stray rows.** The sheets have a title and description above the header (row 5). | The loader reads from row 5 and skips empty or text-only rows. |
+
+
+
+  
+
 
 Due to data inconsistency, we had to make some new changes to the constraints of attributes of our schema. This is the new ERD:
 ![Getting Started](./images/ERD-2.png)
