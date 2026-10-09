@@ -111,9 +111,19 @@ Due to data inconsistency, we had to make some new changes to the constraints of
 ![Getting Started](./images/ERD-2.png)
 
 ## Normalization Form of our updated DB structure
+Even after modifying our database structure to integrate real data, our updated schema still satisfies Third Normal Form (3NF). Each table has a single-column primary key, and its attributes describe the record identified by that key:
 
-Even after changing the structure of the DB, the DB stays in 3NF.
-new schema definiton:
+Hurricane: hurricane_id identifies the hurricane's name, start and end dates, and source.
+
+Location: location_id identifies the region, country, coordinates, and source.
+
+MeteorologicalData: md_id identifies the linked hurricane_id and location_id, observation times, weather measurements, and source. Hurricane and location details are not duplicated here.
+
+Destruction: destruction_id identifies the linked md_id, death counts, damage estimates, and source. The associated hurricane and location can be retrieved through MeteorologicalData.
+
+Our updated schema satisfies 1NF because each attribute contains a single value or NULL, without repeating groups. It satisfies 2NF because the single-column primary keys prevent partial dependencies on those keys. Finally, based on the functional dependencies in our design, it satisfies 3NF because non-key attributes do not depend transitively on the primary keys through other non-key attributes.
+
+Adding source, allowing NULL values, and changing damage fields to BIGINT do not introduce new partial or transitive dependencies. Therefore, our updated database structure remains in 3NF.
 
 ## Relational Schema of our updated ERD
 
@@ -128,6 +138,7 @@ Destruction([destruction_ID]:int NOT NULL, MD_ID*:int NOT NULL, deaths_direct:in
 Location([location_id]:int NOT NULL, region:varchar(120) NULL, country:varchar(120) NULL, latitude:decimal(9,6) NULL, longitude:decimal(9,6) NULL, source:varchar(1000) NOT NULL)
 
 ### Explanation of relational Schema of our updated ERD
+Our updated relational schema maintains the four original entities: Hurricane, Location, MeteorologicalData, and Destruction, along with their primary keys and relationships. MeteorologicalData connects hurricanes to specific locations and observation periods, while Destruction stores the associated impacts. During the integration of real-world data, we made several adjustments to accommodate the available information. We allowed NULL values for selected attributes in Location, MeteorologicalData, and Destruction, since hurricane reports do not always provide complete measurements or damage estimates. Furthermore, we changed the financial damage attributes in Destruction to BIGINT to accommodate economic losses reaching billions of US dollars. Finally, we added a source attribute to all four tables to ensure data traceability and transparency. These changes improve the database's ability to handle real-world observations while preserving its original relational structure and normalized design.
 
 ## Limitations of our updated DB
 
